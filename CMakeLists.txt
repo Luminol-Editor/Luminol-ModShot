@@ -315,7 +315,6 @@ set(BINDING_SOURCE
 	binding-mri/window-binding.cpp
 	binding-mri/tilemap-binding.cpp
 	binding-mri/audio-binding.cpp
-	binding-mri/module_rpg.cpp
 	binding-mri/filesystem-binding.cpp
 	binding-mri/oneshot-binding.cpp
 	binding-mri/steam-binding.cpp

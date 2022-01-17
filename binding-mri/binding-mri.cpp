@@ -42,8 +42,6 @@
 
 #include <SDL_filesystem.h>
 
-extern const char module_rpg1[];
-
 static void mriBindingExecute();
 static void mriBindingTerminate();
 static void mriBindingReset();
@@ -146,7 +144,8 @@ static void mriBindingInit()
 		_rb_define_module_function(rb_mKernel, "caller", _kernelCaller);
 	}
 
-	rb_eval_string(module_rpg1);
+	/* We don't want this! */
+	// rb_eval_string(module_rpg1);
 
 	VALUE mod = rb_define_module("MKXP");
 	_rb_define_module_function(mod, "data_directory", mkxpDataDirectory);
@@ -417,7 +416,7 @@ static void runRMXPScripts(BacktraceData &btData)
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
-	runCustomScript(*entrypoint);
+	runCustomScript(entrypoint);
 
 	while (true) {
 		VALUE exc = rb_gv_get("$!");
