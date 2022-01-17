@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-const wchar_t *ARGV0 = "lib\\oneshot.exe";
+const wchar_t *ARGV0 = "lib\\luminol.exe";
 
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,

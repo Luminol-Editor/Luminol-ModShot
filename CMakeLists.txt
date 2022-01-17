@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.11)
-Project(oneshot)
+Project(luminol)
 
 #set(CONAN_DISABLE_CHECK_COMPILER ON) 
 

@@ -11,11 +11,11 @@ MODSHOT_VERSION_H='''#ifndef MODSHOT_VERSION
 '''
 
 class MkxpConan(ConanFile):
-    name = "oneshot"
+    name = "luminol"
     version = "0.0.0"
     license = "GPLv2"
-    url = "https://github.com/elizagamedev/mkxp-oneshot"
-    description = "OneShot game runtime"
+    url = "https://github.com/Luminol-Editor/Luminol-ModShot"
+    description = "Luminol runtime"
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
     exports_sources = "*"
