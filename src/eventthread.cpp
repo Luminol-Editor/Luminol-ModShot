@@ -31,7 +31,6 @@
 #include <SDL_rect.h>
 
 #include <al.h>
-#include <alc.h>
 
 #include "sharedstate.h"
 #include "graphics.h"
