@@ -47,11 +47,11 @@ fi
 echo "Relocating dependencies..."
 DESTDIR="$2/lib"
 mkdir -p $DESTDIR
-copy_dependencies oneshot "$1/bin/oneshot"
+copy_dependencies luminol "$1/bin/luminol"
 
 echo "Copying standard library..."
 cp -ar "$1/bin/lib/ruby" "$2/lib/"
 cp -ar "$1/bin/lib/cacert.pem" "$2/lib/"
-ln -sf "lib/oneshot" "$2/oneshot"
+ln -sf "lib/luminol" "$2/luminol"
 
 echo "Done!"
