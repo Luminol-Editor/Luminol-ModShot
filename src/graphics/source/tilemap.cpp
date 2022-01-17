@@ -343,7 +343,6 @@ struct TilemapPrivate
 		  ySize(argySize),
 		  zlayersMax(argySize + 5)
 	{
-		Debug() << xSize; Debug() << ySize;  
 
 		/* ZLayer vertices */
 		zlayerVert = new SVVector[zlayersMax];

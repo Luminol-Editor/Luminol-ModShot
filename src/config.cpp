@@ -78,7 +78,7 @@ void Config::read(int argc, char *argv[])
 	PO_DESC(screenMode, bool, false) \
 	PO_DESC(printFPS, bool, false) \
 	PO_DESC(fullscreen, bool, false) \
-	PO_DESC(fixedAspectRatio, bool, true) \
+	PO_DESC(fixedAspectRatio, bool, false) \
 	PO_DESC(smoothScaling, bool, true) \
 	PO_DESC(vsync, bool, true) \
 	PO_DESC(defScreenW, int, 0) \
@@ -90,7 +90,7 @@ void Config::read(int argc, char *argv[])
 	PO_DESC(solidFonts, bool, false) \
 	PO_DESC(subImageFix, bool, false) \
 	PO_DESC(enableBlitting, bool, true) \
-	PO_DESC(maxTextureSize, int, 0) \
+	PO_DESC(maxTextureSize, int, 4096) \
 	PO_DESC(gameFolder, std::string, ".") \
 	PO_DESC(allowSymlinks, bool, false) \
 	PO_DESC(iconPath, std::string, "") \
@@ -179,16 +179,17 @@ void Config::read(int argc, char *argv[])
 
 	SE.sourceCount = clamp(SE.sourceCount, 1, 64);
 
-	commonDataPath = prefPath(".", "OneShot");
+	commonDataPath = prefPath(".", "Luminol");
 
 	//Hardcode some ini/version settings
 	rgssVersion = 1;
-	game.title = "OneShot";
+	game.title = "Luminol";
 	game.scripts = "Data/xScripts.rxdata";
 	gameFolder = "..";
 	
-	defScreenW = 640;
-	defScreenH = 480;
+	// 16:9 aspect ratio
+	defScreenW = 960;
+	defScreenH = 540;
 
 #ifdef STEAM
 	/* Override fullscreen config if Big Picture */
