@@ -38,7 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
         argv[0] = ARGV0;
     }
 
-    _wexecv(L"lib\\oneshot.exe", argv);
+    _wexecv(L"lib\\luminol.exe", argv);
     MessageBoxW(NULL,
         L"Cannot start ModShot for some reason.\nPlease check your ModShot installation.",
         L"ModShot Shim",
