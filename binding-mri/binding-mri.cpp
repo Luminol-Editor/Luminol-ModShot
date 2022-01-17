@@ -406,7 +406,38 @@ struct BacktraceData
 
 static void runRMXPScripts(BacktraceData &btData)
 {
+	/* 
+		!We don't need this since we run main.rb! 
+		TODO: Custom entrypoint
+	*/
+
 	const Config &conf = shState->rtData().config;
+	const std::string entrypoint = conf.entryPoint;
+
+	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
+	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
+
+	std::string scriptData;
+
+	if (!readFileSDL(entrypoint.c_str(), scriptData))
+	{
+		showMsg(std::string("Unable to open entrypoint'") + entrypoint + "'");
+		return;
+	}
+
+	evalString(newStringUTF8(scriptData.c_str(), scriptData.size()),
+	           newStringUTF8(entrypoint.c_str(), entrypoint.size()), NULL);
+
+	while (true) {
+		VALUE exc = rb_gv_get("$!");
+		if (rb_obj_class(exc) != getRbData()->exc[Reset])
+			break;
+
+		processReset();
+	}
+
+	/* Just skip over this */
+	/*
 	const std::string &scriptPack = conf.game.scripts;
 
 	if (scriptPack.empty())
@@ -424,7 +455,7 @@ static void runRMXPScripts(BacktraceData &btData)
 	VALUE scriptArray;
 
 	/* We checked if Scripts.rxdata exists, but something might
-	 * still go wrong */
+	 * still go wrong *\/
 	try
 	{
 		scriptArray = kernelLoadDataInt(scriptPack.c_str(), false);
@@ -441,7 +472,7 @@ static void runRMXPScripts(BacktraceData &btData)
 		return;
 	}
 
-	/* Set the debug flag */
+	/* Set the debug flag *\/
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
@@ -499,7 +530,7 @@ static void runRMXPScripts(BacktraceData &btData)
 		rb_ary_store(script, 3, rb_str_new_cstr(decodeBuffer.c_str()));
 	}
 
-	/* Execute preloaded scripts */
+	/* Execute preloaded scripts *\/
 	for (std::set<std::string>::iterator i = conf.preloadScripts.begin();
 	     i != conf.preloadScripts.end(); ++i)
 		runCustomScript(*i);
@@ -539,6 +570,7 @@ static void runRMXPScripts(BacktraceData &btData)
 
 		processReset();
 	}
+	*/
 }
 
 static void showExc(VALUE exc, const BacktraceData &btData)

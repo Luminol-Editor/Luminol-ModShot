@@ -53,6 +53,7 @@ struct Config
 	bool enableBlitting;
 	int maxTextureSize;
 	bool isOtherView;
+	std::string entryPoint;
 
 	std::string gameFolder;
 	bool allowSymlinks;
