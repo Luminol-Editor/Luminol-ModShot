@@ -40,7 +40,7 @@ jobs:
           mkdir ${{ runner.temp }}\built_artifact;
           move ${{ runner.temp }}\build\bin\lib ${{ runner.temp }}\built_artifact\lib;
           move ${{ runner.temp }}\build\bin\* ${{ runner.temp }}\built_artifact\lib;
-          move ${{ runner.temp }}\built_artifact\lib\oneshot-shim.exe ${{ runner.temp }}\built_artifact\oneshot.exe
+          move ${{ runner.temp }}\built_artifact\lib\luminol-shim.exe ${{ runner.temp }}\built_artifact\luminol.exe
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
