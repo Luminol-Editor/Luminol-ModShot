@@ -417,16 +417,7 @@ static void runRMXPScripts(BacktraceData &btData)
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
-	std::string scriptData;
-
-	if (!readFileSDL(entrypoint.c_str(), scriptData))
-	{
-		showMsg(std::string("Unable to open entrypoint'") + entrypoint + "'");
-		return;
-	}
-
-	evalString(newStringUTF8(scriptData.c_str(), scriptData.size()),
-	           newStringUTF8(entrypoint.c_str(), entrypoint.size()), NULL);
+	runCustomScript(*entrypoint);
 
 	while (true) {
 		VALUE exc = rb_gv_get("$!");
