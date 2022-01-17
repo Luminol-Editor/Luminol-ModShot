@@ -1,5 +1,7 @@
 name: Build Modshot
-on: push
+on: 
+  - workflow_dispatch
+  - push
 jobs:
   build-windows:
     name: Build ModShot for Windows
