@@ -417,20 +417,7 @@ static void runRMXPScripts(BacktraceData &btData)
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
-	std::ifstream t(entrypoint.c_str());
-	std::stringstream buffer;
-	buffer << t.rdbuf();
-
-	std::string contents = buffer.str();
-
-	if (contents.empty())
-	{
-		showMsg("Unable to read '" + entrypoint + "'");
-		return;
-	}
-
-	evalString(newStringUTF8(contents.c_str(), contents.size()),
-	           newStringUTF8(entrypoint.c_str(), entrypoint.size()), NULL);
+	runCustomScript("../" + entrypoint);
 
 	while (true) {
 		VALUE exc = rb_gv_get("$!");
