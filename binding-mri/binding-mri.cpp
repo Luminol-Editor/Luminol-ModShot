@@ -412,7 +412,6 @@ static void runRMXPScripts(BacktraceData &btData)
 	*/
 
 	/*
-	const Config &conf = shState->rtData().config;
 	const std::string entrypoint = conf.entryPoint;
 
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
@@ -431,6 +430,7 @@ static void runRMXPScripts(BacktraceData &btData)
 
 	/* Just skip over this */
 	
+	const Config &conf = shState->rtData().config;
 	const std::string &scriptPack = conf.game.scripts;
 
 	if (scriptPack.empty())
