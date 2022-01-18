@@ -39,6 +39,7 @@
 #include <assert.h>
 #include <string>
 #include <zlib.h>
+#include <fstream>
 
 #include <SDL_filesystem.h>
 
@@ -413,14 +414,31 @@ static void runRMXPScripts(BacktraceData &btData)
 	const Config &conf = shState->rtData().config;
 	const std::string entrypoint = conf.entryPoint;
 
-	const std::string &path = conf.customDataPath;
-	const std::string s = path.empty() ? "." : path;
-
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
-	VALUE script = rb_str_new_cstr((s + "/" + entrypoint).c_str());
-	rb_load(script, 0);
+	std::ifstream t(entrypoint.c_str());
+	std::stringstream buffer;
+	buffer << t.rdbuf();
+
+	std::string contents = buffer.str();
+
+	if (contents.empty())
+	{
+		showMsg("Unable to read '" + entrypoint + "'");
+		return;
+	}
+
+	evalString(newStringUTF8(contents.c_str(), contents.size()),
+	           newStringUTF8(entrypoint.c_str(), entrypoint.size()), NULL);
+
+	while (true) {
+		VALUE exc = rb_gv_get("$!");
+		if (rb_obj_class(exc) != getRbData()->exc[Reset])
+			break;
+
+		processReset();
+	}
 
 	/* Just skip over this */
 	/*
