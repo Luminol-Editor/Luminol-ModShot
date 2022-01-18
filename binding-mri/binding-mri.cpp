@@ -411,6 +411,7 @@ static void runRMXPScripts(BacktraceData &btData)
 		TODO: Custom entrypoint
 	*/
 
+	/*
 	const Config &conf = shState->rtData().config;
 	const std::string entrypoint = conf.entryPoint;
 
@@ -426,9 +427,10 @@ static void runRMXPScripts(BacktraceData &btData)
 
 		processReset();
 	}
+	*/
 
 	/* Just skip over this */
-	/*
+	
 	const std::string &scriptPack = conf.game.scripts;
 
 	if (scriptPack.empty())
@@ -446,7 +448,7 @@ static void runRMXPScripts(BacktraceData &btData)
 	VALUE scriptArray;
 
 	/* We checked if Scripts.rxdata exists, but something might
-	 * still go wrong *\/
+	 * still go wrong */
 	try
 	{
 		scriptArray = kernelLoadDataInt(scriptPack.c_str(), false);
@@ -463,7 +465,7 @@ static void runRMXPScripts(BacktraceData &btData)
 		return;
 	}
 
-	/* Set the debug flag *\/
+	/* Set the debug flag */
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
@@ -521,7 +523,7 @@ static void runRMXPScripts(BacktraceData &btData)
 		rb_ary_store(script, 3, rb_str_new_cstr(decodeBuffer.c_str()));
 	}
 
-	/* Execute preloaded scripts *\/
+	/* Execute preloaded scripts */
 	for (std::set<std::string>::iterator i = conf.preloadScripts.begin();
 	     i != conf.preloadScripts.end(); ++i)
 		runCustomScript(*i);
@@ -561,7 +563,6 @@ static void runRMXPScripts(BacktraceData &btData)
 
 		processReset();
 	}
-	*/
 }
 
 static void showExc(VALUE exc, const BacktraceData &btData)
