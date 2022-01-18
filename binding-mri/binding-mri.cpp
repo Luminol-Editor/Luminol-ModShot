@@ -419,7 +419,7 @@ static void runRMXPScripts(BacktraceData &btData)
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
-	runCustomScript(s + entrypoint);
+	runCustomScript(s + "/" + entrypoint);
 
 	while (true) {
 		VALUE exc = rb_gv_get("$!");
