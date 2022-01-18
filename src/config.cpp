@@ -185,7 +185,7 @@ void Config::read(int argc, char *argv[])
 	//Hardcode some ini/version settings
 	rgssVersion = 1;
 	game.title = "Luminol";
-	game.scripts = "Data/xScripts.rxdata";
+	game.scripts = "entrypoint";
 	gameFolder = "..";
 	
 	// 16:9 aspect ratio
