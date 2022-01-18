@@ -413,10 +413,13 @@ static void runRMXPScripts(BacktraceData &btData)
 	const Config &conf = shState->rtData().config;
 	const std::string entrypoint = conf.entryPoint;
 
+	const std::string &path = conf.customDataPath;
+	const std::string s = path.empty() ? "." : path;
+
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
 	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
-	runCustomScript(entrypoint);
+	runCustomScript(s + entrypoint);
 
 	while (true) {
 		VALUE exc = rb_gv_get("$!");
