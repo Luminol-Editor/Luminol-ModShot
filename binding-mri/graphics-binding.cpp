@@ -117,6 +117,20 @@ RB_METHOD(graphicsHeight)
 	return rb_fix_new(shState->graphics().height());
 }
 
+RB_METHOD(graphicsWindowWidth)
+{
+	RB_UNUSED_PARAM;
+
+	return rb_fix_new(shState->graphics().windowWidth());
+}
+
+RB_METHOD(graphicsWindowHeight)
+{
+	RB_UNUSED_PARAM;
+
+	return rb_fix_new(shState->graphics().windowHeight());
+}
+
 RB_METHOD(graphicsWait)
 {
 	RB_UNUSED_PARAM;
@@ -239,6 +253,8 @@ void graphicsBindingInit()
 	_rb_define_module_function(module, "fadein", graphicsFadein);
 	_rb_define_module_function(module, "snap_to_bitmap", graphicsSnapToBitmap);
 	_rb_define_module_function(module, "resize_screen", graphicsResizeScreen);
+	_rb_define_module_function(module, "window_width", graphicsWindowWidth);
+	_rb_define_module_function(module, "window_height", graphicsWindowHeight);
 
 	INIT_GRA_PROP_BIND( Brightness, "brightness" );
 	//}

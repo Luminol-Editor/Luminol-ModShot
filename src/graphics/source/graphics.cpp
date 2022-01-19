@@ -736,15 +736,6 @@ struct GraphicsPrivate
 			recalculateScreenSize(threadData);
 			updateScreenResoRatio(threadData);
 
-			scRes = winSize;
-
-			screen.setResolution(winSize.x, winSize.y);
-
-			TEXFBO::allocEmpty(frozenScene, winSize.x, winSize.y);
-
-			FloatRect screenRect(0, 0, winSize.x, winSize.y);
-			screenQuad.setTexPosRect(screenRect, screenRect);
-
 			SDL_Rect screen = { scOffset.x, scOffset.y, scSize.x, scSize.y };
 			threadData->ethread->notifyGameScreenChange(screen);
 		}
@@ -1138,6 +1129,16 @@ int Graphics::width() const
 int Graphics::height() const
 {
 	return p->scRes.y;
+}
+
+int Graphics::windowWidth() const
+{
+	return p->winSize.x;
+}
+
+int Graphics::windowHeight() const
+{
+	return p->winSize.y;
 }
 
 void Graphics::resizeScreen(int width, int height)
