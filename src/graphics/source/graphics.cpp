@@ -743,7 +743,7 @@ struct GraphicsPrivate
 			TEXFBO::allocEmpty(frozenScene, winSize.x, winSize.y);
 
 			FloatRect screenRect(0, 0, winSize.x, winSize.y);
-			p->screenQuad.setTexPosRect(screenRect, screenRect);
+			screenQuad.setTexPosRect(screenRect, screenRect);
 
 			SDL_Rect screen = { scOffset.x, scOffset.y, scSize.x, scSize.y };
 			threadData->ethread->notifyGameScreenChange(screen);
