@@ -78,7 +78,7 @@ void Config::read(int argc, char *argv[])
 	PO_DESC(screenMode, bool, false) \
 	PO_DESC(printFPS, bool, false) \
 	PO_DESC(fullscreen, bool, false) \
-	PO_DESC(fixedAspectRatio, bool, false) \
+	PO_DESC(fixedAspectRatio, bool, true) \
 	PO_DESC(smoothScaling, bool, true) \
 	PO_DESC(vsync, bool, true) \
 	PO_DESC(defScreenW, int, 0) \

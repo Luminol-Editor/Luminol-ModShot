@@ -50,9 +50,9 @@
 #include <errno.h>
 #include <algorithm>
 
-#define DEF_SCREEN_W  (rgssVer == 1 ? 640 : 544)
-#define DEF_SCREEN_H  (rgssVer == 1 ? 480 : 416)
-#define DEF_FRAMERATE (rgssVer == 1 ?  40 :  60)
+#define DEF_SCREEN_W  960
+#define DEF_SCREEN_H  540
+#define DEF_FRAMERATE 60
 
 #if defined _WIN32
 	#define OS_W32
@@ -735,6 +735,15 @@ struct GraphicsPrivate
 			glState.viewport.refresh();
 			recalculateScreenSize(threadData);
 			updateScreenResoRatio(threadData);
+
+			scRes = winSize;
+
+			screen.setResolution(winSize.x, winSize.y);
+
+			TEXFBO::allocEmpty(frozenScene, winSize.x, winSize.y);
+
+			FloatRect screenRect(0, 0, winSize.x, winSize.y);
+			p->screenQuad.setTexPosRect(screenRect, screenRect);
 
 			SDL_Rect screen = { scOffset.x, scOffset.y, scSize.x, scSize.y };
 			threadData->ethread->notifyGameScreenChange(screen);
