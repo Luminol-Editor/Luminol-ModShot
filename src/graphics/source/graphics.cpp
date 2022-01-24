@@ -1161,6 +1161,8 @@ void Graphics::resizeScreen(int width, int height)
 	p->screenQuad.setTexPosRect(screenRect, screenRect);
 
 	shState->eThread().requestWindowResize(width, height);
+	glState.scissorBox.init(IntRect(0, 0, width, height));
+	//Debug() << glState.scissorBox.width();
 }
 
 void Graphics::playMovie(const char *filename)
