@@ -24,7 +24,7 @@ class MkxpConan(ConanFile):
         "openal/1.21.1",
         "physfs/3.0.1@astrabit/testing",
         "pixman/0.34.0@astrabit/testing",
-        "ruby/3.1.0@astrabit/testing",
+        "ruby/3.0.2@astrabit/testing",
         "sdl2_image/2.0.5@bincrafters/stable",
         "sdl2_ttf/2.0.15@bincrafters/stable",
         "sdl_sound-mkxp/1.0.1@eliza/stable",
