@@ -33,7 +33,8 @@ class MkxpConan(ConanFile):
         "libpng/1.6.37",
         "zlib/1.2.11",
         "bzip2/1.0.8",
-        "giflib/5.2.1"
+        "giflib/5.2.1",
+        "libffi/3.4.2"
     )
     build_requires = ("ruby_installer/3.0.2@astrabit/testing")
     options = {
