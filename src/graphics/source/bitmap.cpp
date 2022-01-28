@@ -918,6 +918,40 @@ void Bitmap::hueChange(int hue)
 	p->onModified();
 }
 
+void Bitmap::toneChange(const Vec4 &tone)
+{
+	guardDisposed();
+
+	GUARD_MEGA;
+
+	TEXFBO newTex = shState->texPool().request(width(), height());
+
+	FloatRect texRect(rect());
+
+	Quad &quad = shState->gpQuad();
+	quad.setTexPosRect(texRect, texRect);
+	quad.setColor(Vec4(1, 1, 1, 1));
+
+	ToneShader &shader = shState->shaders().tone;
+	shader.bind();
+	shader.setTone(tone);
+
+	FBO::bind(newTex.fbo);
+	p->pushSetViewport(shader);
+	p->bindTexture(shader);
+
+	p->blitQuad(quad);
+
+	p->popViewport();
+
+	TEX::unbind();
+
+	shState->texPool().release(p->gl);
+	p->gl = newTex;
+
+	p->onModified();
+}
+
 void Bitmap::drawText(int x, int y,
                       int width, int height,
                       const char *str, int align)

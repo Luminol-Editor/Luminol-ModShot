@@ -86,6 +86,10 @@ public:
 
 	void hueChange(int hue);
 
+	/* Add a tone shift method because we don't actually have one! */
+	/* Thank you enterbrain, very enterbrain */
+	void toneChange(const Vec4 &tone);
+
 	enum TextAlign
 	{
 		Left = 0,

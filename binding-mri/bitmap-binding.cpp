@@ -247,6 +247,21 @@ RB_METHOD(bitmapHueChange)
 	return self;
 }
 
+RB_METHOD(bitmapToneChange)
+{
+	Bitmap *b = getPrivateData<Bitmap>(self);
+
+	VALUE toneObj;
+	Tone *tone;
+
+	rb_get_args(argc, argv, "o", &toneObj RB_ARG_END);
+	tone = getPrivateDataCheck<Tone>(toneObj, ToneType);
+
+	GUARD_EXC( b->toneChange(tone->norm); );
+
+	return self;
+}
+
 RB_METHOD(bitmapDrawText)
 {
 	Bitmap *b = getPrivateData<Bitmap>(self);
@@ -483,6 +498,8 @@ bitmapBindingInit()
 	_rb_define_method(klass, "blur",               bitmapBlur);
 	_rb_define_method(klass, "radial_blur",        bitmapRadialBlur);
 	//}
+
+	_rb_define_method(klass, "tone_change", bitmapToneChange);
 
 	INIT_PROP_BIND(Bitmap, Font, "font");
 }

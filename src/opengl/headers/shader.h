@@ -394,6 +394,17 @@ private:
 	GLint u_iTime, u_opacity;
 };
 
+class ToneShader : public ShaderBase
+{
+public:
+	ToneShader();
+
+	void setTone(const Vec4 &value);
+
+private:
+	GLint u_tone;
+};
+
 
 /* Global object containing all available shaders */
 struct ShaderSet
@@ -423,6 +434,7 @@ struct ShaderSet
 	ZoomShader zoom;
 	CubicShader cubic;
 	WaterShader water;
+	ToneShader tone;
 };
 
 #endif // SHADER_H

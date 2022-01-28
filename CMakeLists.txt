@@ -236,6 +236,7 @@ set(EMBEDDED_INPUT
 	shader/cubic_lens.frag
 	shader/water.frag
 	shader/zoom.vert
+	shader/tone.frag
 	assets/icon.png
 	assets/gamecontrollerdb.txt
 )

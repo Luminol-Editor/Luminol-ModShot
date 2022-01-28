@@ -60,6 +60,7 @@
 #include "water.frag.xxd"
 #include "chronos.frag.xxd"
 #include "zoom.vert.xxd"
+#include "tone.frag.xxd"
 
 
 #define INIT_SHADER(vert, frag, name) \
@@ -757,4 +758,18 @@ void WaterShader::setiTime(const float value)
 void WaterShader::setOpacity(const float value)
 {
 	gl.Uniform1f(u_opacity, value);
+}
+
+ToneShader::ToneShader()
+{
+	INIT_SHADER(simple, tone, ToneShader);
+
+	ShaderBase::init();
+
+	GET_U(tone);
+}
+
+void ToneShader::setTone(const Vec4 &tone)
+{
+	setVec4Uniform(u_tone, tone);
 }
