@@ -66,6 +66,8 @@ public:
 		int x, y;
 		bool inWindow;
 		bool buttons[32];
+		int scrollDir;
+		bool hasScrolled;
 	};
 
 	struct FingerState

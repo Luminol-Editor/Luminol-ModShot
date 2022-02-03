@@ -117,6 +117,20 @@ RB_METHOD(inputMouseY)
 	return rb_fix_new(shState->input().mouseY());
 }
 
+RB_METHOD(inputScrollDir)
+{
+	RB_UNUSED_PARAM;
+
+	return rb_fix_new(shState->input().mouseScrollDir());
+}
+
+RB_METHOD(inputMouseScroll)
+{
+	RB_UNUSED_PARAM;
+
+	return rb_bool_new(shState->input().mouseScrolled());
+}
+
 RB_METHOD(inputQuit)
 {
 	RB_UNUSED_PARAM;
@@ -573,6 +587,9 @@ inputBindingInit()
 	_rb_define_module_function(module, "set_key_pressed", inputSetKeyPressed);
 	_rb_define_module_function(module, "set_key_repeated", inputSetKeyRepeated);
 	_rb_define_module_function(module, "set_key_triggered", inputSetKeyTriggered);
+
+	_rb_define_module_function(module, "mouse_scroll_dir", inputScrollDir);
+	_rb_define_module_function(module, "mouse_scroll", inputMouseScroll);
 
 	if (rgssVer >= 3)
 	{

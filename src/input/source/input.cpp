@@ -368,6 +368,8 @@ struct InputPrivate
 
 	bool triedExit;
 
+	bool hasScrolled;
+
 	struct
 	{
 		int active;
@@ -405,6 +407,7 @@ struct InputPrivate
 		dir8Data.active = 0;
 
 		triedExit = false;
+		hasScrolled	= false;
 	}
 
 	inline ButtonState &getStateCheck(int code)
@@ -760,6 +763,8 @@ void Input::update()
 	RGSSThreadData &rtData = shState->rtData();
 	p->triedExit = rtData.triedExit;
 	rtData.triedExit.clear();
+	p->hasScrolled = EventThread::mouseState.hasScrolled;
+	EventThread::mouseState.hasScrolled = false;
 }
 
 bool Input::isPressed(int button)
@@ -799,6 +804,16 @@ int Input::mouseY()
 	RGSSThreadData &rtData = shState->rtData();
 
 	return (EventThread::mouseState.y - rtData.screenOffset.y) * rtData.sizeResoRatio.y;
+}
+
+int Input::mouseScrollDir()
+{
+	return EventThread::mouseState.scrollDir;
+}
+
+bool Input::mouseScrolled()
+{
+	return p->hasScrolled;
 }
 
 bool Input::hasQuit()

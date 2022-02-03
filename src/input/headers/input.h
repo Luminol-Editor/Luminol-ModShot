@@ -317,6 +317,9 @@ public:
 	int mouseX();
 	int mouseY();
 
+	int mouseScrollDir();
+	bool mouseScrolled();
+
 	bool hasQuit();
 
 	Uint16 modkeys;
