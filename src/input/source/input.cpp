@@ -806,9 +806,14 @@ int Input::mouseY()
 	return (EventThread::mouseState.y - rtData.screenOffset.y) * rtData.sizeResoRatio.y;
 }
 
-int Input::mouseScrollDir()
+int Input::mouseScrollX()
 {
-	return EventThread::mouseState.scrollDir;
+	return EventThread::mouseState.scrollX;
+}
+
+int Input::mouseScrollY()
+{
+	return EventThread::mouseState.scrollY;
 }
 
 bool Input::mouseScrolled()

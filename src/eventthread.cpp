@@ -511,23 +511,8 @@ void EventThread::process(RGSSThreadData &rtData)
 		case SDL_MOUSEWHEEL:
 			SDL_LockMutex(inputMut);
 			mouseState.hasScrolled  = true;
-			if(event.wheel.y > 0) // scroll up
-        	{
-             mouseState.scrollDir = 1;
-        	}
-        	else if(event.wheel.y < 0) // scroll down
-        	{
-             mouseState.scrollDir = 2;
-        	}
-
-        	if(event.wheel.x > 0) // scroll right
-        	{
-             mouseState.scrollDir = 3;
-        	}
-        	else if(event.wheel.x < 0) // scroll left
-        	{
-             mouseState.scrollDir = 4;
-        	}
+			mouseState.scrollY = event.wheel.y;
+			mouseState.scrollX = event.wheel.x;
 			SDL_UnlockMutex(inputMut);
 			break;
 

@@ -317,7 +317,8 @@ public:
 	int mouseX();
 	int mouseY();
 
-	int mouseScrollDir();
+	int mouseScrollY();
+	int mouseScrollX();
 	bool mouseScrolled();
 
 	bool hasQuit();

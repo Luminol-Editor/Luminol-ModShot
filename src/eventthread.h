@@ -66,7 +66,7 @@ public:
 		int x, y;
 		bool inWindow;
 		bool buttons[32];
-		int scrollDir;
+		int scrollX, scrollY;
 		bool hasScrolled;
 	};
 
