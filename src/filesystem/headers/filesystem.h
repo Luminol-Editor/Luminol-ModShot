@@ -23,6 +23,10 @@
 #define FILESYSTEM_H
 
 #include <SDL_rwops.h>
+//#include <string>
+
+//#include "filesystemImpl.h"
+//namespace mkxp_fs = filesystemImpl;
 
 struct FileSystemPrivate;
 class SharedFontState;
@@ -33,10 +37,13 @@ public:
 	FileSystem(bool allowSymlinks);
 	~FileSystem();
 
-	void addPath(const char *path);
+	void addPath(const char *path, const char *mountpoint = 0, bool reload = false);
+	void removePath(const char *path, bool reload = false);
 
 	/* Call these after the last 'addPath()' */
 	void createPathCache();
+
+	void reloadPathCache();
 
 	/* Scans "Fonts/" and creates inventory of
 	 * available font assets */
@@ -63,8 +70,12 @@ public:
 	                 const char *filename,
 	                 bool freeOnClose = false);
 
+	// std::string normalize(const char* pathname, bool preferred, bool absolute)
+
 	/* Does not perform extension supplementing */
 	bool exists(const char *filename);
+
+	const char *desensitize(const char *filename);
 
 private:
 	FileSystemPrivate *p;

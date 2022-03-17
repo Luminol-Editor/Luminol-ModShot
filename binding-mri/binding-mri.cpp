@@ -86,6 +86,8 @@ void chromaBindingInit();
 void modshotwindowBindingInit();
 void aleffectBindingInit();
 void otherviewBindingInit();
+void pathCacheBindingInit();
+
 RB_METHOD(mriPrint);
 RB_METHOD(mriP);
 RB_METHOD(mkxpDataDirectory);
@@ -125,6 +127,8 @@ static void mriBindingInit()
 	modshotwindowBindingInit();
 	aleffectBindingInit();
 	otherviewBindingInit();
+	pathCacheBindingInit();
+	
 	rb_define_global_const("MODSHOT_VERSION", rb_str_new_cstr(MODSHOT_VERSION));
 	if (rgssVer >= 3)
 	{

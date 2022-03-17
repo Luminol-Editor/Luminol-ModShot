@@ -326,6 +326,7 @@ set(BINDING_SOURCE
 	binding-mri/modshot-window-binding.cpp
 	binding-mri/aleffect-binding.cpp
 	binding-mri/otherview-binding.cpp
+	binding-mri/pathcache-binding.cpp
 )
 
 source_group("Binding Source" FILES ${BINDING_SOURCE} ${BINDING_HEADERS})

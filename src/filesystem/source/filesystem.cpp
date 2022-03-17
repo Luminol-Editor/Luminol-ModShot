@@ -20,6 +20,7 @@
 */
 
 #include "filesystem.h"
+//#include "filesystemImpl.h"
 
 #include "rgssad.h"
 #include "font.h"
@@ -333,19 +334,35 @@ FileSystem::~FileSystem()
 		Debug() << "PhyFS failed to deinit.";
 }
 
-void FileSystem::addPath(const char *path)
-{
-	/* Try the normal mount first */
-	if (!PHYSFS_mount(path, 0, 1))
-	{
-		/* If it didn't work, try mounting via a wrapped
-		 * SDL_RWops */
-		PHYSFS_Io *io = createSDLRWIo(path);
+void FileSystem::addPath(const char *path, const char *mountpoint, bool reload) {
+  /* Try the normal mount first */
+    int state = PHYSFS_mount(path, mountpoint, 1);
+  	if (!state) {
+    	/* If it didn't work, try mounting via a wrapped
+     	* SDL_RWops */
+    	PHYSFS_Io *io = createSDLRWIo(path);
 
-		if (io)
-			PHYSFS_mountIo(io, path, 0, 1);
-	}
+    	if (io)
+      	state = PHYSFS_mountIo(io, path, 0, 1);
+  	}
+    if (!state) {
+        PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
+        throw Exception(Exception::PHYSFSError, "Failed to mount %s (%s)", path, PHYSFS_getErrorByCode(err));
+    }
+    
+    if (reload) reloadPathCache();
 }
+
+void FileSystem::removePath(const char *path, bool reload) {
+    
+    if (!PHYSFS_unmount(path)) {
+        PHYSFS_ErrorCode err = PHYSFS_getLastErrorCode();
+        throw Exception(Exception::PHYSFSError, "Failed to unmount %s (%s)", path, PHYSFS_getErrorByCode(err));
+    }
+    
+    if (reload) reloadPathCache();
+}
+
 
 struct CacheEnumData
 {
@@ -450,6 +467,14 @@ void FileSystem::createPathCache()
 	PHYSFS_enumerate("", cacheEnumCB, &data);
 
 	p->havePathCache = true;
+}
+
+void FileSystem::reloadPathCache() {
+    if (!p->havePathCache) return;
+    
+    p->fileLists.clear();
+    p->pathCache.clear();
+    createPathCache();
 }
 
 struct FontSetsCBData
@@ -659,7 +684,22 @@ void FileSystem::openReadRaw(SDL_RWops &ops,
 	initReadOps(handle, ops, freeOnClose);
 }
 
+//std::string FileSystem::normalize(const char *pathname, bool preferred, bool absolute) {
+//	return filesystemImpl::normalizePath(pathname, preferred, absolute);
+//}
+
 bool FileSystem::exists(const char *filename)
 {
 	return PHYSFS_exists(filename);
+}
+
+const char *FileSystem::desensitize(const char *filename) {
+  std::string fn_lower(filename);
+    
+  std::transform(fn_lower.begin(), fn_lower.end(), fn_lower.begin(), [](unsigned char c){
+      return std::tolower(c);
+  });
+  if (p->havePathCache && p->pathCache.contains(fn_lower))
+    return p->pathCache[fn_lower].c_str();
+  return filename;
 }
