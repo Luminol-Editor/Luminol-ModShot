@@ -12,6 +12,10 @@ jobs:
         include: 
           - { sys: ucrt64, env: ucrt-x86_64 }
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Instal xxd
+        uses: choco install -y vim
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
       - name: Install/Build Dependencies for ModShot
