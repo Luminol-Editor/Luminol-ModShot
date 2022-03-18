@@ -17,3 +17,4 @@ jobs:
       - name: Install/Build Dependencies for ModShot
         shell: msys2 {0}
         run: ./init.sh
+        working-directory: ${{ runner.temp }}
