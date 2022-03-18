@@ -15,5 +15,5 @@ jobs:
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
       - name: Install/Build Dependencies for ModShot
-        msystem: ${{matrix.sys}}
+        shell: msys2 {0}
         run: ./init.sh
