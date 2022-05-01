@@ -21,10 +21,10 @@
 
 #include <alc.h>
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_sound.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_sound.h>
 #include <physfs.h>
 
 #ifdef _MSC_VER
@@ -180,7 +180,7 @@ static void setupWindowIcon(const Config &conf, SDL_Window *win)
 	SDL_RWops *iconSrc;
 
 	if (conf.iconPath.empty())
-		iconSrc = SDL_RWFromConstMem(assets_icon_png, assets_icon_png_len);
+		iconSrc = SDL_RWFromConstMem(___assets_icon_png, ___assets_icon_png_len);
 	else
 		iconSrc = SDL_RWFromFile(conf.iconPath.c_str(), "rb");
 
@@ -234,9 +234,14 @@ static void setGamePathInRegistry() {
 #endif
 	//TODO handle this for Linux/Mac
 }
-
-int main(int argc, char *argv[])
-{
+#ifdef _WIN32
+#include <windows.h>
+int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+	auto argc = __argc;
+	auto argv = __argv;
+#else
+int main(int argc, char *argv[]) {
+#endif
 	Debug() << "ModShot version" << MODSHOT_VERSION;
 	SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
 	SDL_SetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK, "0");
@@ -386,8 +391,8 @@ int main(int argc, char *argv[])
 
 #ifndef STEAM
 	/* Add controller bindings from embedded controller DB */
-	SDL_RWops *controllerDB = SDL_RWFromConstMem(assets_gamecontrollerdb_txt,
-	                                             assets_gamecontrollerdb_txt_len);
+	SDL_RWops *controllerDB = SDL_RWFromConstMem(___assets_gamecontrollerdb_txt,
+	                                             ___assets_gamecontrollerdb_txt_len);
 	SDL_GameControllerAddMappingsFromRW(controllerDB, 1);
 #endif
 
@@ -425,6 +430,7 @@ int main(int argc, char *argv[])
 			SDL_Delay(10);
 		}
 
+		Debug() << "Waiting for shutdown";
 		/* If RGSS thread ack'd request, wait for it to shutdown,
 		* otherwise abandon hope and just end the process as is. */
 		if (rtData.rqTermAck)
@@ -440,6 +446,8 @@ int main(int argc, char *argv[])
 									rtData.rgssErrorMsg.c_str(), win);
 		}
 	}
+
+	Debug() << "Cleaning up events";
 
 	/* Clean up any remainin events */
 	eventThread.cleanup();

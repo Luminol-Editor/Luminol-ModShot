@@ -22,7 +22,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <SDL_keycode.h>
+#include <SDL2/SDL_keycode.h>
 
 struct InputPrivate;
 struct RGSSThreadData;

@@ -1,24 +1,47 @@
 cmake_minimum_required(VERSION 2.8.11)
 Project(luminol)
 
-#set(CONAN_DISABLE_CHECK_COMPILER ON) 
-
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
-
-## Setup options ##
-
-# Note this option only adds steamshim_child into oneshot.
-# It's outside this repo's responsibility to compile the parent.
-# Contact rkevin for details.
 option(STEAM "Build for Steam" OFF)
 option(DEBUG "Debug mode" OFF)
 
-## Misc setup ##
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_BUILD_RPATH "lib")
 
-## Setup main source ##
+IF("${CMAKE_SYSTEM}" MATCHES "Linux")
+	SET(LINUX ON)
+ENDIF()
+
+IF(WORKDIR_CURRENT)
+	list(APPEND DEFINES
+		WORKDIR_CURRENT
+	)
+ENDIF()
+
+set(CMAKE_SKIP_BUILD_RPATH TRUE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH ${BIN_RPATH})
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+
+set(MRI_VERSION "3.1" CACHE STRING "Version of MRI to link with")
+
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(SIGCXX        REQUIRED sigc++-2.0)
+pkg_check_modules(PIXMAN        REQUIRED pixman-1)
+pkg_check_modules(PHYSFS        REQUIRED physfs>=2.1)
+pkg_check_modules(VORBISFILE    REQUIRED vorbisfile)
+pkg_check_modules(SDL2          REQUIRED sdl2)
+pkg_check_modules(SDL2_TTF      REQUIRED SDL2_ttf)
+pkg_check_modules(SDL2_IMAGE    REQUIRED SDL2_image)
+pkg_check_modules(SDL_SOUND     REQUIRED SDL_sound)
+pkg_check_modules(MRI REQUIRED ruby-3.1)
+pkg_check_modules(OGG REQUIRED ogg)
+pkg_check_modules(SPEEX REQUIRED speex)
+pkg_check_modules(MODPLUG REQUIRED libmodplug)
+
+find_package(Boost 1.49 COMPONENTS program_options REQUIRED)
+find_package(OpenAL REQUIRED)
+find_package(ZLIB REQUIRED)
 
 set(SRC_AUDIO_HEADER_PATH src/audio/headers)
 set(SRC_GRAPHICS_HEADER_PATH src/graphics/headers)
@@ -83,6 +106,7 @@ set(MAIN_HEADERS
 	${SRC_FS_HEADER_PATH}/filesystem.h
 	${SRC_FS_HEADER_PATH}/rgssad.h
 
+	src/display.h
 	src/binding.h
 	src/etc.h
 	src/etc-internal.h
@@ -101,13 +125,7 @@ set(MAIN_HEADERS
 	src/debugwriter.h
 	src/oneshot.h
 	src/pipe.h
-	chromasdk/RzChromaSDKDefines.h
-	chromasdk/RzChromaSDKTypes.h
-	chromasdk/RzErrors.h
-	chromasdk/ChromaApi.h
 	src/i18n.h
-	src/otherview-message.h
-	src/crash-handler.h
 )
 
 set(MAIN_SOURCE
@@ -154,6 +172,7 @@ set(MAIN_SOURCE
 	${SRC_FS_SOURCE_PATH}/rgssad.cpp
 
 	src/main.cpp
+	src/display.cpp
 	src/eventthread.cpp
 	src/etc.cpp
 	src/config.cpp
@@ -161,8 +180,6 @@ set(MAIN_SOURCE
 	src/sharedstate.cpp
 	src/oneshot.cpp
 	src/i18n.cpp
-	src/otherview-message.cpp
-	src/crash-handler.cpp
 )
 
 if(WIN32)
@@ -172,12 +189,10 @@ if(WIN32)
 	include_directories(
 		${CMAKE_CURRENT_BINARY_DIR}/windows
 	)
-elseif(APPLE)
-	list(APPEND MAIN_HEADERS src/mac-desktop.h)
-	list(APPEND MAIN_SOURCE src/mac-desktop.mm)
 else()
-	find_package(PkgConfig REQUIRED)
-	pkg_check_modules(LINUXPKGS REQUIRED gtk+-2.0 libxfconf-0)
+	if(NOT MSYS2)
+        pkg_check_modules(LINUXPKGS REQUIRED gtk+-2.0 libxfconf-0)
+    endif()
 	include_directories(${LINUXPKGS_INCLUDE_DIRS})
 	add_compile_options(${LINUXPKGS_CFLAGS_OTHER} -g)
 	list(APPEND PLATFORM_LIBRARIES ${LINUXPKGS_LDFLAGS})
@@ -200,8 +215,6 @@ if (STEAM)
 endif()
 
 source_group("MKXP Source" FILES ${MAIN_SOURCE} ${MAIN_HEADERS})
-
-## Setup embedded source ##
 
 set(EMBEDDED_INPUT
 	shader/common.h
@@ -237,6 +250,7 @@ set(EMBEDDED_INPUT
 	shader/water.frag
 	shader/zoom.vert
 	shader/tone.frag
+	shader/binary_glitch.frag
 	assets/icon.png
 	assets/gamecontrollerdb.txt
 )
@@ -253,8 +267,6 @@ if (MSVC)
 		NOMINMAX
 	)
 endif()
-
-## Process Embeddeds ##
 
 find_program(XXD_EXE xxd
 	DOC "Location of the xxd executable"
@@ -286,8 +298,6 @@ foreach(item ${EMBEDDED_INPUT})
 endforeach()
 
 source_group("Embedded Source" FILES ${EMBEDDED_INPUT} ${EMBEDDED_SOURCE})
-
-## Setup binding source ##
 
 list(APPEND DEFINES
 	BINDING_MRI
@@ -321,19 +331,24 @@ set(BINDING_SOURCE
 	binding-mri/steam-binding.cpp
 	binding-mri/wallpaper-binding.cpp
 	binding-mri/journal-binding.cpp
-	binding-mri/chroma-binding.cpp
 	binding-mri/niko-binding.cpp
 	binding-mri/modshot-window-binding.cpp
 	binding-mri/aleffect-binding.cpp
-	binding-mri/otherview-binding.cpp
 	binding-mri/pathcache-binding.cpp
+	binding-mri/screen-binding.cpp
+	binding-mri/display-binding.cpp
 )
 
 source_group("Binding Source" FILES ${BINDING_SOURCE} ${BINDING_HEADERS})
 
-## Setup main executable ##
-
-set(CMAKE_CXX_STANDARD 11)
+link_directories(
+	${SIGCXX_LIBRARY_DIRS}
+	${PIXMAN_LIBRARY_DIRS}
+	${PHYSFS_LIBRARY_DIRS}
+	${SDL2_LIBRARY_DIRS} # Blindly assume other SDL bits are in same directory
+	${Boost_LIBRARY_DIR}
+	${MRI_LIBDIR}
+)
 
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
 	${MAIN_HEADERS}
@@ -343,35 +358,61 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE WIN32
 	${EMBEDDED_SOURCE}
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE ${DEFINES})
-target_include_directories(${PROJECT_NAME} PRIVATE src)
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_AUDIO_HEADER_PATH})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_GRAPHICS_HEADER_PATH})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_OPENGL_HEADER_PATH})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_INPUT_HEADER_PATH})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_FS_HEADER_PATH})
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_STEAM_PATH})
-target_link_libraries(${PROJECT_NAME}
-	CONAN_PKG::boost
-	CONAN_PKG::openal
-	CONAN_PKG::physfs
-	CONAN_PKG::pixman
-	CONAN_PKG::ruby
-	CONAN_PKG::sdl2
-	CONAN_PKG::sdl2_image
-	CONAN_PKG::sdl2_ttf
-	CONAN_PKG::sdl_sound-mkxp
-	CONAN_PKG::sigc++
-	${PLATFORM_LIBRARIES})
+target_compile_definitions(${PROJECT_NAME} PRIVATE 
+    ${DEFINES}
+)
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    src 
+    ${SRC_STEAM_PATH} 
+    ${SRC_AUDIO_HEADER_PATH} 
+    ${SRC_GRAPHICS_HEADER_PATH} 
+    ${SRC_OPENGL_HEADER_PATH} 
+    ${SRC_INPUT_HEADER_PATH} 
+    ${SRC_FS_HEADER_PATH}
 
-IF(APPLE)
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND cmake -P "${CMAKE_SOURCE_DIR}/patches/mac/CompleteBundle.cmake" VERBATIM)
-ENDIF()
+    ${SIGCXX_INCLUDE_DIRS}
+	${PIXMAN_INCLUDE_DIRS}
+	${PHYSFS_INCLUDE_DIRS}
+	${SDL2_INCLUDE_DIRS} # Blindly assume other SDL bits are in same directory
+	${SDL_SOUND_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIR}
+	${MRI_INCLUDE_DIRS}
+	${VORBISFILE_INCLUDE_DIRS}
+	${FLUID_INCLUDE_DIRS}
+	${OPENAL_INCLUDE_DIR}
+)
+
+target_link_libraries(${PROJECT_NAME}
+	${SIGCXX_LIBRARIES}
+	${SDL2_LIBRARIES}
+	${SDL2_IMAGE_LIBRARIES}
+	${SDL2_TTF_LIBRARIES}
+	${SDL_SOUND_LIBRARIES}
+	${PHYSFS_LIBRARIES}
+	${PIXMAN_LIBRARIES}
+	${Boost_LIBRARIES}
+	${MRI_LIBRARIES}
+	${VORBISFILE_LIBRARIES}
+	${FLUID_LIBRARIES}
+	${OPENAL_LIBRARY}
+	${ZLIB_LIBRARY}
+
+    ${OGG_LIBRARIES}
+    ${SPEEX_LIBRARIES}
+    ${MODPLUG_LIBRARIES}
+
+	${PLATFORM_LIBRARIES}
+)
+
+if(WIN32)
+target_link_libraries(${PROJECT_NAME}
+    winmm.lib
+)
+endif()
+
 
 if(WIN32 AND NOT STEAM)
 	add_executable("luminol-shim" WIN32
 	"${CMAKE_SOURCE_DIR}/windows/shim.c"
 	"${CMAKE_SOURCE_DIR}/assets/resources.rc")
 endif()
-
-#add_subdirectory(scripts)

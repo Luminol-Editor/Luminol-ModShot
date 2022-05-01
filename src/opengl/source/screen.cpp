@@ -1,6 +1,6 @@
-#include <SDL.h>
-#include <SDL_shape.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_shape.h>
+#include <SDL2/SDL_image.h>
 
 #define FPS 60
 #define DEFAULT_WIDTH 320
@@ -9,6 +9,7 @@
 #include "config.h"
 #include "debugwriter.h"
 #include "pipe.h"
+#include "sharedstate.h"
 
 static void showInitError(const std::string &msg)
 {
@@ -67,6 +68,8 @@ int screenMain(Config &conf)
 
 	char messageBuf[256];
 
+	std::string filePath =  "./Graphics/Journal/";
+
 	unsigned int ticks = SDL_GetTicks();
 	for (;;) {
 		// Handle events
@@ -82,10 +85,13 @@ int screenMain(Config &conf)
 		if (readMessage(ipc, messageBuf, sizeof(messageBuf))) {
 			if (strcmp(messageBuf, "END") == 0)
 				break;
-			std::string imgname = conf.gameFolder + "/Journal/" + messageBuf + ".png";
+			std::string imgname = filePath + messageBuf + ".png";
 			SDL_FreeSurface(shape);
-			if ((shape = IMG_Load(imgname.c_str())) == NULL)
+			if ((shape = IMG_Load(imgname.c_str())) == NULL) {
+				std::string error = "Unable to find image ";
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "OneShot", (error + imgname).c_str(), 0);
 				break;
+			}
 			SDL_SetWindowSize(win, shape->w, shape->h);
 			SDL_SetWindowShape(win, shape, &shapeMode);
 		}

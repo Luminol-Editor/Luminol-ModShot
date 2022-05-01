@@ -1,9 +1,9 @@
 #ifndef SDLUTIL_H
 #define SDLUTIL_H
 
-#include <SDL_atomic.h>
-#include <SDL_thread.h>
-#include <SDL_rwops.h>
+#include <SDL2/SDL_atomic.h>
+#include <SDL2/SDL_thread.h>
+#include <SDL2/SDL_rwops.h>
 
 #include <string>
 #include <iostream>

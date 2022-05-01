@@ -24,7 +24,7 @@
 #include "boost-hash.h"
 #include "exception.h"
 
-#include <SDL_video.h>
+#include <SDL2/SDL_video.h>
 #include <string>
 
 GLFunctions gl;

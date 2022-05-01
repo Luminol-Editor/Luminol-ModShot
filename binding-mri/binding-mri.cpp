@@ -41,7 +41,7 @@
 #include <zlib.h>
 #include <fstream>
 
-#include <SDL_filesystem.h>
+#include <SDL2/SDL_filesystem.h>
 
 static void mriBindingExecute();
 static void mriBindingTerminate();
@@ -82,10 +82,8 @@ void wallpaperBindingTerminate();
 void nikoBindingInit();
 void oneshotBindingInit();
 void steamBindingInit();
-void chromaBindingInit();
 void modshotwindowBindingInit();
 void aleffectBindingInit();
-void otherviewBindingInit();
 void pathCacheBindingInit();
 
 RB_METHOD(mriPrint);
@@ -123,10 +121,8 @@ static void mriBindingInit()
 	nikoBindingInit();
 	oneshotBindingInit();
 	steamBindingInit();
-	chromaBindingInit();
 	modshotwindowBindingInit();
 	aleffectBindingInit();
-	otherviewBindingInit();
 	pathCacheBindingInit();
 	
 	rb_define_global_const("MODSHOT_VERSION", rb_str_new_cstr(MODSHOT_VERSION));
@@ -471,7 +467,6 @@ static void runRMXPScripts(BacktraceData &btData)
 
 	/* Set the debug flag */
 	rb_gv_set("$debug", conf.debugMode ? Qtrue : Qfalse);
-	rb_gv_set("$otherview", conf.isOtherView ? Qtrue : Qfalse);
 
 	rb_gv_set("$RGSS_SCRIPTS", scriptArray);
 

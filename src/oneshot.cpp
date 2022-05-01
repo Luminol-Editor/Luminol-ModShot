@@ -211,9 +211,9 @@ Oneshot::Oneshot(RGSSThreadData &threadData) :
 	if (GetLastError() == ERROR_MORE_DATA)
 	{
 		//Get their full (display) name
-		WCHAR *name = new WCHAR[size];
+		char* name = new char[size];
 		GetUserNameEx(NameDisplay, name, &size);
-		p->userName = w32_fromWide(name);
+		p->userName = w32_fromWide((WCHAR*) name);
 		delete [] name;
 	}
 	else
@@ -223,18 +223,19 @@ Oneshot::Oneshot(RGSSThreadData &threadData) :
 		GetUserName(0, &size2);
 		if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 		{
-			WCHAR *name = new WCHAR[size2];
+			char* name = new char[size2];
 			GetUserName(name, &size2);
-			p->userName = w32_fromWide(name);
+			p->userName = w32_fromWide((WCHAR*) name);
 			delete [] name;
 		}
 	}
 
 	// Get documents path
-	WCHAR path[MAX_PATH];
-	SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, path);
-	p->docsPath = w32_fromWide(path);
-	p->gamePath = p->docsPath+"\\My Games";
+	//char* path = new char[MAX_PATH];
+	//SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, path);
+	//p->docsPath = w32_fromWide((WCHAR*) path);
+	p->docsPath = getenv("USERPROFILE") + std::string("\\Documents");
+	p->gamePath = p->docsPath + "\\My Games";
 	p->journal = "_______.exe";
 #else
 	// Get language code
@@ -317,17 +318,6 @@ Oneshot::Oneshot(RGSSThreadData &threadData) :
 	}
 
 	Debug() << "Desktop env  :" << desktopEnv;
-#endif
-
-	/********
-	 * MISC
-	 ********/
-#if defined OS_W32
-	//Get windows version
-	OSVERSIONINFOW version;
-	ZeroMemory(&version, sizeof(version));
-	version.dwOSVersionInfoSize = sizeof(version);
-	GetVersionEx(&version);
 #endif
 }
 

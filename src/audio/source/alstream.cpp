@@ -29,9 +29,9 @@
 #include "sdl-util.h"
 #include "debugwriter.h"
 
-#include <SDL_mutex.h>
-#include <SDL_thread.h>
-#include <SDL_timer.h>
+#include <SDL2/SDL_mutex.h>
+#include <SDL2/SDL_thread.h>
+#include <SDL2/SDL_timer.h>
 
 ALStream::ALStream(LoopMode loopMode,
 				   AL::AuxiliaryEffectSlot::ID effectSlot,

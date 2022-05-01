@@ -58,6 +58,7 @@
 #include "crt_sprite.frag.xxd"
 #include "cubic_lens.frag.xxd"
 #include "water.frag.xxd"
+#include "binary_glitch.frag.xxd"
 #include "chronos.frag.xxd"
 #include "zoom.vert.xxd"
 #include "tone.frag.xxd"
@@ -65,7 +66,7 @@
 
 #define INIT_SHADER(vert, frag, name) \
 { \
-	Shader::init(shader_##vert##_vert, shader_##vert##_vert_len, shader_##frag##_frag, shader_##frag##_frag_len, \
+	Shader::init(___shader_##vert##_vert, ___shader_##vert##_vert_len, ___shader_##frag##_frag, ___shader_##frag##_frag_len, \
 	#vert, #frag, #name); \
 }
 
@@ -144,8 +145,8 @@ static void setupShaderSource(GLuint shader, GLenum type,
 		++i;
 	}
 
-	shaderSrc[i] = (const GLchar*) shader_common_h;
-	shaderSrcSize[i] = shader_common_h_len;
+	shaderSrc[i] = (const GLchar*) ___shader_common_h;
+	shaderSrcSize[i] = ___shader_common_h_len;
 	++i;
 
 	shaderSrc[i] = (const GLchar*) body;
@@ -772,4 +773,18 @@ ToneShader::ToneShader()
 void ToneShader::setTone(const Vec4 &tone)
 {
 	setVec4Uniform(u_tone, tone);
+}
+
+BinaryShader::BinaryShader()
+{
+	INIT_SHADER(simple, binary_glitch, BinaryShader);
+
+	ShaderBase::init();
+
+	GET_U(strength);
+}
+
+void BinaryShader::setStrength(const float value)
+{
+	gl.Uniform1f(u_strength, value);
 }

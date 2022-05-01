@@ -21,11 +21,11 @@
 
 #include "settingsmenu.h"
 
-#include <SDL_video.h>
-#include <SDL_ttf.h>
-#include <SDL_surface.h>
-#include <SDL_keyboard.h>
-#include <SDL_rect.h>
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_keyboard.h>
+#include <SDL2/SDL_rect.h>
 
 #include "keybindings.h"
 #include "eventthread.h"

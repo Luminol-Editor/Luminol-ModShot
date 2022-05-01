@@ -31,7 +31,7 @@
 #include <string>
 #include <utility>
 
-#include <SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 typedef std::pair<std::string, int> FontKey;
 

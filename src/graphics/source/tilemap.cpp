@@ -46,7 +46,7 @@
 #include <algorithm>
 #include <vector>
 
-#include <SDL_surface.h>
+#include <SDL2/SDL_surface.h>
 
 #include "debugwriter.h"
 
