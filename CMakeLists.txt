@@ -334,13 +334,9 @@ set(BINDING_SOURCE
 	binding-mri/niko-binding.cpp
 	binding-mri/modshot-window-binding.cpp
 	binding-mri/aleffect-binding.cpp
-<<<<<<< HEAD
-	binding-mri/otherview-binding.cpp
 	binding-mri/pathcache-binding.cpp
-=======
 	binding-mri/screen-binding.cpp
 	binding-mri/display-binding.cpp
->>>>>>> 6944074f48b8bca9aa01397c77e7c5a24bb60ead
 )
 
 source_group("Binding Source" FILES ${BINDING_SOURCE} ${BINDING_HEADERS})

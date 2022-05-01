@@ -27,6 +27,7 @@ binding_source = [files(
     'module_rpg.cpp',
     'niko-binding.cpp',
     'oneshot-binding.cpp',
+    'pathcache-binding.cpp',
     'plane-binding.cpp',
     'screen-binding.cpp',
     'sprite-binding.cpp',

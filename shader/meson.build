@@ -30,6 +30,7 @@ embedded_shaders = [
     'tilemap.vert',
     'trans.frag',
     'transSimple.frag',
+    'tone.frag',
     'water.frag',
     'zoom.vert'
 ]
