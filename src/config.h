@@ -52,7 +52,6 @@ struct Config
 	bool subImageFix;
 	bool enableBlitting;
 	int maxTextureSize;
-	bool isOtherView;
 	std::string entryPoint;
 
 	std::string gameFolder;

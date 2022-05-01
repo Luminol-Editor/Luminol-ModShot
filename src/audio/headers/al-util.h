@@ -25,7 +25,7 @@
 #define AL_ALEXT_PROTOTYPES
 #include <al.h>
 #include <efx.h>
-#include <SDL_audio.h>
+#include <SDL2/SDL_audio.h>
 #include <assert.h>
 
 namespace AL

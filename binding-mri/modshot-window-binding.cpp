@@ -5,9 +5,9 @@
 #include "binding-types.h"
 #include "eventthread.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-//#include <SDL_syswm.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+//#include <SDL2/SDL_syswm.h>
 #include <boost/crc.hpp>
 
 #ifdef _WIN32

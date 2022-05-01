@@ -404,6 +404,15 @@ public:
 private:
 	GLint u_tone;
 };
+class BinaryShader : public ShaderBase
+{
+public:
+	BinaryShader();
+
+	void setStrength(const float value);
+private:
+	GLint u_strength;
+};
 
 
 /* Global object containing all available shaders */
@@ -435,6 +444,7 @@ struct ShaderSet
 	CubicShader cubic;
 	WaterShader water;
 	ToneShader tone;
+	BinaryShader binary;
 };
 
 #endif // SHADER_H

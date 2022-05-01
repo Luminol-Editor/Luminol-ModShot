@@ -27,11 +27,11 @@
 #include "sdl-util.h"
 #include "keybindings.h"
 
-#include <SDL_scancode.h>
-#include <SDL_joystick.h>
-#include <SDL_gamecontroller.h>
-#include <SDL_mouse.h>
-#include <SDL_mutex.h>
+#include <SDL2/SDL_scancode.h>
+#include <SDL2/SDL_joystick.h>
+#include <SDL2/SDL_gamecontroller.h>
+#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_mutex.h>
 
 #include <string>
 

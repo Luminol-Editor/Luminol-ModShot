@@ -32,7 +32,7 @@
 
 #include <physfs.h>
 
-#include <SDL_sound.h>
+#include <SDL2/SDL_sound.h>
 
 #include <stdio.h>
 #include <string.h>

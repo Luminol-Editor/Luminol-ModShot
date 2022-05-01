@@ -28,7 +28,7 @@
 #include "glstate.h"
 #include "graphics.h"
 
-#include <SDL_rect.h>
+#include <SDL2/SDL_rect.h>
 
 #include <sigc++/connection.h>
 
@@ -55,6 +55,8 @@ struct ViewportPrivate
 
 	float waterTime;
 
+	float binaryStrength;
+
 	Vec2 zoom;
 
 	EtcTemps tmp;
@@ -70,6 +72,7 @@ struct ViewportPrivate
 		  rgbOffsety(Vec4(0, 0, 0, 0)),
 		  cubicTime(0.0),
 		  waterTime(0.0),
+		  binaryStrength(0.0),
 		  zoom(Vec2(1.0, 1.0))
 	{
 		rect->set(x, y, width, height);
@@ -110,7 +113,7 @@ struct ViewportPrivate
 	bool needsEffectRender(bool flashing)
 	{
 		bool rectEffective = !rect->isEmpty();
-		bool colorToneEffective = color->hasEffect() || tone->hasEffect() || flashing || scanned || rgbOffsetx.xyzNotNull() || rgbOffsety.xyzNotNull() || zoom.x != 1 || zoom.y != 1 || cubicTime != 0.0 || waterTime != 0.0;
+		bool colorToneEffective = color->hasEffect() || tone->hasEffect() || flashing || scanned || rgbOffsetx.xyzNotNull() || rgbOffsety.xyzNotNull() || zoom.x != 1 || zoom.y != 1 || cubicTime != 0.0 || waterTime != 0.0 || binaryStrength != 0.0;
 
 		return (rectEffective && colorToneEffective && isOnScreen);
 	}
@@ -169,6 +172,7 @@ DEF_ATTR_SIMPLE(Viewport, Color, Color&, *p->color)
 DEF_ATTR_SIMPLE(Viewport, Tone,  Tone&,  *p->tone)
 DEF_ATTR_SIMPLE(Viewport, Scanned, bool, p->scanned)
 DEF_ATTR_SIMPLE(Viewport, CubicTime, float, p->cubicTime)
+DEF_ATTR_SIMPLE(Viewport, BinaryStrength, float, p->binaryStrength)
 DEF_ATTR_SIMPLE(Viewport, WaterTime, float, p->waterTime)
 DEF_ATTR_SIMPLE(Viewport, RGBOffsetx, Vec4, p->rgbOffsetx)
 DEF_ATTR_SIMPLE(Viewport, RGBOffsety, Vec4, p->rgbOffsety)
@@ -226,7 +230,7 @@ void Viewport::composite()
 	 * render them. */
 	if (renderEffect)
 		scene->requestViewportRender
-		        (p->color->norm, flashColor, p->tone->norm, p->scanned, p->rgbOffsetx, p->rgbOffsety, p->zoom, p->cubicTime, p->waterTime);
+		        (p->color->norm, flashColor, p->tone->norm, p->scanned, p->rgbOffsetx, p->rgbOffsety, p->zoom, p->cubicTime, p->waterTime, p->binaryStrength);
 
 	glState.scissorBox.pop();
 	glState.scissorTest.pop();

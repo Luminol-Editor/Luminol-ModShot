@@ -20,13 +20,12 @@ lib/
 *.dir/
 x64/
 
-Makefile*
-
 /oneshot
 /steamshim_parent/steamshim
 
 __pycache__
 /build*
+/m32build
 /dist
 /debug
 /release
@@ -56,9 +55,8 @@ steamworks/
 assets/icon.ico
 assets/icon.ico
 
-src/version.h
-
 !build-entrypoint-linux.sh
 !build-entrypoint-windows.bat
 
 .vscode
+out/

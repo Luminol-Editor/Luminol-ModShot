@@ -24,9 +24,9 @@
 
 #include "input.h"
 
-#include <SDL_scancode.h>
-#include <SDL_joystick.h>
-#include <SDL_gamecontroller.h>
+#include <SDL2/SDL_scancode.h>
+#include <SDL2/SDL_joystick.h>
+#include <SDL2/SDL_gamecontroller.h>
 #include <stdint.h>
 #include <assert.h>
 #include <vector>

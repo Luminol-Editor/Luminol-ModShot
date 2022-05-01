@@ -22,11 +22,7 @@
 #ifndef FILESYSTEM_H
 #define FILESYSTEM_H
 
-#include <SDL_rwops.h>
-//#include <string>
-
-//#include "filesystemImpl.h"
-//namespace mkxp_fs = filesystemImpl;
+#include <SDL2/SDL_rwops.h>
 
 struct FileSystemPrivate;
 class SharedFontState;
